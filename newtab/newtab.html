@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusTab</title>
+  <link rel="stylesheet" href="newtab.css" />
+</head>
+<body>
+  <!-- Wallpaper Background -->
+  <div id="wallpaper"></div>
+
+  <!-- Main App Container -->
+  <div id="app">
+    <!-- Clock & Date -->
+    <div id="clock-time" aria-label="Current time"></div>
+    <div id="clock-date" aria-label="Current date"></div>
+
+    <!-- Greeting -->
+    <h1 id="greeting" aria-label="Greeting"></h1>
+
+    <!-- Shloka Card -->
+    <div id="shloka-card" aria-label="Daily shloka"></div>
+
+    <!-- Focus Mode Toggle -->
+    <button id="focus-mode-toggle" class="focus-mode-toggle" role="switch" aria-pressed="false" aria-label="Toggle Focus Mode">
+      <span id="focus-mode-indicator" class="focus-mode-indicator">🔓</span>
+      <span id="focus-mode-label" class="focus-mode-label">Focus Mode</span>
+    </button>
+
+    <!-- Task Panel -->
+    <div id="tasks-panel" aria-label="Task list">
+      <div class="tasks-header">
+        <h2 class="tasks-title">Tasks</h2>
+      </div>
+      <div class="tasks-add-row">
+        <input
+          type="text"
+          id="task-input"
+          placeholder="+ Add a task..."
+          aria-label="Enter a new task"
+          maxlength="200"
+          autocomplete="off"
+        />
+        <button id="task-add-btn" aria-label="Add task">Add</button>
+      </div>
+      <div class="tasks-list" role="list" aria-label="Your tasks"></div>
+    </div>
+  </div>
+
+  <!-- Focus Banner (bottom) -->
+  <div id="focus-banner" role="status" aria-label="Today's focus"></div>
+
+  <!-- Focus Prompt Modal -->
+  <div id="focus-modal" role="dialog" aria-modal="true" aria-label="Set daily focus">
+    <div class="focus-modal-card">
+      <h2>What is your <strong>main focus</strong> today?</h2>
+      <p>Set one intention to guide your day.</p>
+      <div class="focus-modal-input-group">
+        <input
+          type="text"
+          id="focus-input"
+          placeholder="e.g. Ship the MVP"
+          aria-label="Enter your daily focus"
+          maxlength="120"
+          autocomplete="off"
+        />
+        <button id="focus-submit" aria-label="Set focus">Set Focus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onboarding Modal (first-run) -->
+  <div id="onboarding-modal" role="dialog" aria-modal="true" aria-label="Welcome to FocusTab">
+    <div class="onboarding-card">
+      <div class="logo">🎯</div>
+      <h1>Welcome to FocusTab</h1>
+      <p>Every new tab is a moment of intentionality.<br/>Let's start by getting to know you.</p>
+      <input
+        type="text"
+        id="onboarding-name-input"
+        placeholder="What's your name?"
+        aria-label="Enter your name"
+        maxlength="40"
+        autocomplete="off"
+      />
+      <button id="onboarding-submit" aria-label="Continue">Let's Go 🚀</button>
+    </div>
+  </div>
+
+  <!-- New Tab Smart Prompt -->
+  <div id="newtab-prompt" class="ntp-overlay" role="dialog" aria-modal="true" aria-label="New tab prompt">
+    <div class="ntp-card">
+      <!-- Options View -->
+      <div class="ntp-options">
+        <h2 class="ntp-title">What are you opening this tab for?</h2>
+        <div class="ntp-buttons">
+          <button id="ntp-new-task-btn" class="ntp-option-btn ntp-option-new">
+            <span class="ntp-option-icon">📝</span>
+            <span class="ntp-option-text">New Task</span>
+          </button>
+          <button id="ntp-continue-btn" class="ntp-option-btn ntp-option-continue">
+            <span class="ntp-option-icon">↩</span>
+            <span class="ntp-option-text">Continue a Task</span>
+          </button>
+          <button id="ntp-browsing-btn" class="ntp-option-btn ntp-option-browse">
+            <span class="ntp-option-icon">🌐</span>
+            <span class="ntp-option-text">Just Browsing</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- New Task View -->
+      <div class="ntp-new-task" style="display:none;">
+        <button class="ntp-back-btn" id="ntp-new-task-back" aria-label="Go back">← Back</button>
+        <h2 class="ntp-title">Add a new task</h2>
+        <div class="ntp-input-row">
+          <input
+            type="text"
+            id="ntp-new-task-input"
+            class="ntp-input"
+            placeholder="What are you working on?"
+            maxlength="200"
+            autocomplete="off"
+            aria-label="New task title"
+          />
+          <button id="ntp-new-task-submit" class="ntp-submit-btn">Add & Start</button>
+        </div>
+      </div>
+
+      <!-- Continue Task View -->
+      <div class="ntp-continue" style="display:none;">
+        <button class="ntp-back-btn" id="ntp-continue-back" aria-label="Go back">← Back</button>
+        <h2 class="ntp-title">Pick a task to continue</h2>
+        <div id="ntp-continue-list" class="ntp-continue-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Trigger -->
+  <button id="dashboard-trigger" class="dashboard-trigger" aria-label="Open dashboard">📊</button>
+
+  <!-- Dashboard Panel -->
+  <div id="dashboard-panel" class="dashboard-panel" role="region" aria-label="Dashboard analytics">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">Dashboard</h2>
+      <button id="dashboard-close" class="dashboard-close" aria-label="Close dashboard">✕</button>
+    </div>
+
+    <!-- Daily View -->
+    <div class="dashboard-section">
+      <div class="dashboard-section-label">Today</div>
+      <div class="dashboard-today-summary">
+        <div class="dashboard-today-ring">
+          <span id="dashboard-today-count" class="dashboard-today-number">0</span>
+          <span class="dashboard-today-caption">completed</span>
+        </div>
+        <div id="dashboard-today-focus" class="dashboard-today-focus" style="display:none;"></div>
+      </div>
+      <div id="dashboard-today-list" class="dashboard-today-list"></div>
+    </div>
+
+    <!-- Weekly View -->
+    <div class="dashboard-section">
+      <div class="dashboard-section-label">This Week</div>
+      <div id="dashboard-weekly-chart" class="dashboard-weekly-chart"></div>
+      <div id="dashboard-weekly-total" class="dashboard-weekly-total">0 tasks this week</div>
+    </div>
+  </div>
+
+  <!-- Settings Gear Button -->
+  <button id="settings-gear" class="settings-gear" aria-label="Open settings">⚙</button>
+
+  <!-- Settings Overlay -->
+  <div id="settings-overlay" class="settings-overlay"></div>
+
+  <!-- Settings Panel -->
+  <aside id="settings-panel" class="settings-panel" role="dialog" aria-label="Settings">
+    <div class="settings-panel-header">
+      <h2 class="settings-panel-title">Settings</h2>
+      <button id="settings-close" class="settings-panel-close" aria-label="Close settings">✕</button>
+    </div>
+
+    <div class="settings-panel-body">
+      <!-- Section A: Profile -->
+      <section class="settings-section">
+        <h3 class="settings-section-title">Profile</h3>
+        <label class="settings-label" for="settings-name">Your Name</label>
+        <div class="settings-row">
+          <input type="text" id="settings-name" class="settings-input" maxlength="40" autocomplete="off" />
+          <button id="settings-name-save" class="settings-btn-primary">Save</button>
+        </div>
+      </section>
+
+      <!-- Section D: Clock Format -->
+      <section class="settings-section">
+        <h3 class="settings-section-title">Clock Format</h3>
+        <div class="settings-toggle-group">
+          <button id="settings-clock-12" class="settings-toggle-btn active">12 Hour</button>
+          <button id="settings-clock-24" class="settings-toggle-btn">24 Hour</button>
+        </div>
+      </section>
+
+      <!-- Section B: Wallpaper -->
+      <section class="settings-section">
+        <h3 class="settings-section-title">Wallpaper</h3>
+        <div id="settings-wallpaper-preview" class="settings-wallpaper-preview"></div>
+        <div class="settings-row" style="margin-top:10px;">
+          <label class="settings-file-label">
+            Upload Image
+            <input type="file" id="settings-wallpaper-input" accept="image/*" hidden />
+          </label>
+          <button id="settings-wallpaper-default" class="settings-btn-secondary">Use Default</button>
+        </div>
+      </section>
+
+      <!-- Section C: Blocked Sites -->
+      <section class="settings-section">
+        <h3 class="settings-section-title">Blocked Sites</h3>
+        <div class="settings-row" style="margin-bottom:10px;">
+          <input type="text" id="settings-block-input" class="settings-input" placeholder="e.g. tiktok.com" maxlength="100" autocomplete="off" />
+          <button id="settings-block-add" class="settings-btn-primary">Add</button>
+        </div>
+        <div id="settings-blocklist" class="settings-blocklist"></div>
+      </section>
+
+      <!-- Section E: Danger Zone -->
+      <section class="settings-section settings-danger-zone">
+        <h3 class="settings-section-title danger">⚠ Danger Zone</h3>
+        <button id="settings-clear-tasks" class="settings-btn-danger">Clear All Tasks</button>
+        <button id="settings-reset-all" class="settings-btn-danger">Reset All Settings</button>
+      </section>
+    </div>
+  </aside>
+
+  <script type="module" src="newtab.js"></script>
+</body>
+</html>

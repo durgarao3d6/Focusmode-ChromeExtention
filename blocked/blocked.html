@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusTab — Blocked</title>
+  <link rel="stylesheet" href="blocked.css" />
+</head>
+<body>
+  <div id="wallpaper"></div>
+
+  <div id="blocked-container">
+    <div class="blocked-icon">🔒</div>
+    <h1 class="blocked-title">You're in Focus Mode</h1>
+    <p class="blocked-site" id="blocked-site-name"></p>
+
+    <div class="blocked-focus-card" id="blocked-focus-card">
+      <span class="blocked-focus-label">Your focus today</span>
+      <p class="blocked-focus-text" id="blocked-focus-text"></p>
+    </div>
+
+    <button id="disable-focus-btn" aria-label="Disable Focus Mode">
+      Disable Focus Mode
+    </button>
+
+    <p class="blocked-hint">Stay focused. You've got this. 💪</p>
+  </div>
+
+  <script src="blocked.js"></script>
+</body>
+</html>
